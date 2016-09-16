@@ -1,5 +1,4 @@
 var conclusion=""; var description=""; var curentArtery = []; var arrName = []; var arrArt = []; var nameCheck=[]; 
-var firstRCA=true; var nonSignif=false;
 
 function descriptArea(i) {
 	if (curentArtery[i].leasions[0].leasionType=="узурация контуров") {
@@ -56,15 +55,22 @@ function descriptArea(i) {
 }
 
 function makeDescription() {
-	var description_str=[]; var isClear = true;
-	description=""; conclusion=""; firstRCA=true;
-	for (var i = 0; i < cor.length; i++) {
-		if (cor[i].leasions.length>0) { //создаем эпилог заключения
-			conclusion="Ангиографические признаки атеросклеротического поражения "+regioInParent+". ";
-			break;
+	var description_str=[]; var isClear = true; var nonSignif=false; var firstRCA=true; 
+	description=""; conclusion="";
+	for (var i = 0; i < cor.length; i++) { //проверяем без патологии или г/незначимые стенозы
+		if (cor[i].leasions.length>0) {
+			isClear=false;
+			if ((cor[i].leasions[0].leasionType=="узурация контуров")||
+				(cor[i].leasions[0].leasionType=="г/незначимый стеноз")) {nonSignif=true}
 		}
-		else {conclusion="Ангиографических признаков поражения "+regioInParent+" не выявлено."}
 	}
+		if (isClear==false) { //создаем эпилог заключения
+			conclusion="Ангиографические признаки атеросклеротического поражения "+regioInParent;
+			if (nonSignif==true) {
+				conclusion+=" без гемодинамически значимых изменений."
+			} else {conclusion+=". "}
+		} else {conclusion="Ангиографических признаков поражения "+regioInParent+" не выявлено."}
+
 	for (var j=0; j<arteries.length; j++){ //перебор артерий
 		if ((arteries[j].indexOf("ПКА")>-1)&&(firstRCA==true)) { //абзац перед ПКА
 			description+="\n";
