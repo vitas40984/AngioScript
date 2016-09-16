@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+	<title>Angio-d's - коронарография</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="css/angioscript.css">
+	<style>
+		
+		main div:first-child {	/*zone*/
+			background-image: url(img/cor.png);
+			width: 600px;
+			height: 450px;
+		}
+		header {
+			background-image: url(img/room70.jpg); 
+			height: 100px;
+			border-bottom: 2px solid gray;
+			vertical-align: top;
+			background-repeat: no-repeat;
+		}
+		header a {
+			text-decoration: none;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<a href="index.html" title="На главную"><h1 style="margin-left: 25%; color:#000033; font-size: 50pt; margin-top: 0"><i>A n g i o<sub style="color:#CC0000">&nbsp; d ' < s c r i p t ></sub></i></h1></a>
+		<p style="margin-top: -55px; margin-left: 10px"><i><b>Он-лайн сервис для описания ангиограмм</b></i></p>
+	</header>
+	<main>
+		<div id="zone"></div>
+		<div>
+			<p class="label">Выбрано: </p><input class="areaNameOut" type="text" id="areaNameOut" style="width: 100%">
+			<p>Характер поражения:</p>
+			<ul type="none">
+				<li><input type="radio" name="leasionType" id="usuration" value="узурация контуров">
+				<label for="usuration">узурация контуров</label></li>
+				<li><input type="radio" name="leasionType" id="nonSignifStenosis" value="г/незначимый стеноз">
+				<label for="nonSignifStenosis">г/незначимый стеноз</label></li>
+				<li><input type="radio" name="leasionType" id="localStenosis" value="локальный стеноз">
+				<label for="localStenosis">локальный стеноз</label></li>
+				<li><input type="radio" name="leasionType" id="segmentalStenosis" value="сегментарный стеноз">
+				<label for="segmentalStenosis">сегментарный стеноз</label></li>
+				<li><input type="radio" name="leasionType" id="prolongedStenosis" value="пролонгированный стеноз">
+				<label for="prolongedStenosis">пролонгированный стеноз</label></li>
+				<li><input type="radio" name="leasionType" id="multipleStenosis" value="множественные стенозы">
+				<label for="multipleStenosis">множественные стенозы</label></li>
+				<li><input type="radio" name="leasionType" id="segmentalOcclusion" value="сегментарная окклюзия">
+				<label for="segmentalOcclusion">сегментарная окклюзия</label>
+				<input class="occlusionLength" type="text" id="occlusionLength" placeholder="0 мм"></li>
+
+				<li><input type="radio" name="leasionType" id="magistralOcclusionFromOstium" value="магистральная окклюзия от устья">
+				<label for="magistralOcclusionFromOstium">магистральная окклюзия от устья</label></li>
+
+				<li><input type="radio" name="leasionType" id="magistralOcclusion" value="магистральная окклюзия">
+				<label for="magistralOcclusion">магистральная окклюзия не от устья</label></li>
+				<li><input type="radio" name="leasionType" id="nonOcclusiveThrombosis" value="неокклюзионный тромбоз">
+				<label for="nonOcclusiveThrombosis">неокклюзионный тромбоз</label></li>
+				<li><input type="radio" name="leasionType" id="occlusiveThrombosis" value="окклюзионный тромбоз">
+				<label for="occlusiveThrombosis">окклюзионный тромбоз</label></li>
+				<li>Стент:</li>
+				<ul type="none">
+					<li><input type="radio" name="leasionType" id="stentClear" value="функционирующий стент">
+					<label for="stentClear">функционирующия стент</label></li>
+					<li><input type="radio" name="leasionType" id="nonSignifRestenosis" value="г/незначимый рестеноз">
+					<label for="nonSignifRestenosis">г/незначимый рестеноз</label></li>
+					<li><input type="radio" name="leasionType" id="in-stentRestenosis" value="ин-стент рестеноз">
+					<label for="in-stentRestenosis">ин-стент рестеноз</label></li>
+					<li><input type="radio" name="leasionType" id="distalMarginRestenosis" value="дистальный краевой рестеноз">
+					<label for="distalMarginRestenosis">дистальный краевой рестеноз</label></li>
+					<li><input type="radio" name="leasionType" id="proximalMarginRestenosis" value="проксимальный краевой рестеноз">
+					<label for="proximalMarginRestenosis">проксимальный краевой рестеноз</label></li>
+					<li><input type="radio" name="leasionType" id="Reokklusion" value="реокклюзия">
+					<label for="Reokklusion">реокклюзия</label></li>
+				</ul>
+			</ul>
+			<p>Процент стеноза:</p>
+			<input type="range" name="leasionPercent" id="percentChoiceMin" min="1" max="10" class="range">
+			<input type="text" name="leasionPercent" id="leasionPercent" style="width: 70px">
+			<input type="range" name="leasionPercent" id="percentChoiceMax" min="1" max="10" class="range">
+			<p>На остальном протяжении артерия:</p>
+			<ul type="none">
+				<li><input type="radio" name="remainArtery" id="clear" checked="">
+				<label for="clear">без особенностей</label></li>
+				<li><input type="radio" name="remainArtery" id="remainUsuration" value="узурация контуров">
+				<label for="remainUsuration">узурация контуров</label></li>
+			</ul>
+			<button id="conf" style="float: right;">Применить</button><p>&nbsp;</p>
+			<button id="finish" style="float: right;">Сформировать описание/заключение</button>
+		</div>
+		<p class="title">Описание:</p>
+		<div class="description">
+			<textarea rows="20" cols="100" id="descriptionOut">Заберите здесь Ваше описание</textarea>
+		</div>
+		<p class="title">Заключение:</p>
+		<div class="description">
+			<textarea rows="10" cols="100" id="conclusionOut">Заберите здесь Ваше заключение</textarea>
+		</div>
+	</main>
+	<footer></footer>
+	<script src="js/stenosisRange.js"></script>
+	<script src="js/lilac.js"></script>
+	<script src="js/locat.js"></script>
+	<script src="js/leasionRegister.js"></script>
+	<script src="js/description.js"></script>
+	<script>
+		var cor = cardiac;
+		var arteries = arteries_cardiac;
+		var regioInParent = "коронарных артерий";
+	</script>
+</body>
+</html>
+
+<!--
+-->

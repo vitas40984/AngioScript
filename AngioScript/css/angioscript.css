@@ -1,0 +1,48 @@
+header {
+	background-image: url(img/room70.jpg); 
+	height: 100px;
+	border-bottom: 2px solid gray;
+	vertical-align: top;
+	background-repeat: no-repeat;
+	white-space: nowrap;
+}
+main div {
+	display: inline-block;
+	vertical-align: top;
+	margin: 20px;
+}
+main div:first-child {	/*zone*/
+	width: 370px;
+	height: 880px;
+	border: 2px solid grey;
+	margin: 20px;
+	background-repeat: no-repeat;
+	cursor: crosshair;
+}
+main div p {
+	margin-right: 10px;
+}
+.label {display: inline;}
+.range {margin-top: 10px;}
+.areaNameOut {
+	border: 0;
+}
+.occlusionLength {
+	margin-left: 10px;
+	width: 50px;
+}
+.description {
+	width: 100%;
+	margin: 0 10px;
+}
+.description:last-child {
+	margin-bottom: 20px;
+}
+.title {
+	margin: 0 10px;
+}
+footer {
+	background-color: #CCCCCC;
+	height: 100px;
+	border-top: 2px solid gray;
+}
