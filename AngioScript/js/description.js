@@ -1,54 +1,55 @@
 var conclusion=""; var description=""; var curentArtery = []; var arrName = []; var arrArt = []; var nameCheck=[]; 
 
 function descriptArea(i) {
-	if (curentArtery[i].leasions[0].leasionType=="узурация контуров") {
-		description+=curentArtery[i].name+" с неровными контурами, проходима, значимо не сужена. ";
-	} else if (curentArtery[i].leasions[0].leasionType=="г/незначимый стеноз") {
+	var curentLeasion = curentArtery[i].leasions[0].leasionType;
+	if (curentLeasion=="узурация контуров") {
+		description+=group(curentLeasion, curentArtery[i].name)+" с неровными контурами, проходима, значимо не сужена. ";
+	} else if (curentLeasion=="г/незначимый стеноз") {
 		description+=curentArtery[i].name+checkMale(curentArtery[i].name, " сужена менее 50%. ");
-	} else if (curentArtery[i].leasions[0].leasionType=="локальный стеноз") {
+	} else if (curentLeasion=="локальный стеноз") {
 		description+=curentArtery[i].name+checkMale(curentArtery[i].name, " локально сужена до ")+curentArtery[i].leasions[0].percent+". ";
-		conclusion+=fromUp(curentArtery[i].leasions[0].leasionType)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="сегментарный стеноз") {
+		conclusion+=fromUp(curentLeasion)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
+	} else if (curentLeasion=="сегментарный стеноз") {
 		description+=curentArtery[i].name+checkMale(curentArtery[i].name, " сегментарно сужена до ")+curentArtery[i].leasions[0].percent+". ";
-		conclusion+=fromUp(curentArtery[i].leasions[0].leasionType)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="пролонгированный стеноз") {
+		conclusion+=fromUp(curentLeasion)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
+	} else if (curentLeasion=="пролонгированный стеноз") {
 		description+=curentArtery[i].name+checkMale(curentArtery[i].name, " равномерно сужена до ")+curentArtery[i].leasions[0].percent+". ";
-		conclusion+=fromUp(curentArtery[i].leasions[0].leasionType)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="множественные стенозы") {
+		conclusion+=fromUp(curentLeasion)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
+	} else if (curentLeasion=="множественные стенозы") {
 		description+=curentArtery[i].name+" со множественными сужениями до "+curentArtery[i].leasions[0].percent+". ";
-		conclusion+=fromUp(curentArtery[i].leasions[0].leasionType)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="сегментарная окклюзия") {
+		conclusion+=fromUp(curentLeasion)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
+	} else if (curentLeasion=="сегментарная окклюзия") {
 		description+=curentArtery[i].name+" сегментарно не контрастируется на протяжении "+curentArtery[i].leasions[0].percent+". ";
-		conclusion+=fromUp(curentArtery[i].leasions[0].leasionType)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="магистральная окклюзия от устья") {
+		conclusion+=fromUp(curentLeasion)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
+	} else if (curentLeasion=="магистральная окклюзия от устья") {
 		description+=wholeArtery(curentArtery[i].name)+" не контрастируется. ";
 		conclusion+="Окклюзия "+parent(wholeArtery(curentArtery[i].name))+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="магистральная окклюзия") {
+	} else if (curentLeasion=="магистральная окклюзия") {
 		description+=curentArtery[i].name+" не контрастируется. ";
 		conclusion+="Окклюзия "+parent(curentArtery[i].name)+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="неокклюзионный тромбоз") {
+	} else if (curentLeasion=="неокклюзионный тромбоз") {
 		description+=curentArtery[i].name+" в просвете определяется дефект наполнения, суживающий просвет артерии до "+curentArtery[i].leasions[0].percent+". ";
-		conclusion+=curentArtery[i].leasions[0].leasionType+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="окклюзионный тромбоз") {
+		conclusion+=curentLeasion+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
+	} else if (curentLeasion=="окклюзионный тромбоз") {
 		description+=curentArtery[i].name+" в просвете определяется дефект наполнения, полностью перекрывающий просвет артерии. ";
 		conclusion+="Тромбоз "+parent(curentArtery[i].name)+". ";
 		// СТЕНТЫ
-	} else if (curentArtery[i].leasions[0].leasionType=="функционирующий стент") {
+	} else if (curentLeasion=="функционирующий стент") {
 		description+=curentArtery[i].name+": визуализируется стент, проходим, в просвете не сужен. ";
 		conclusion+="Состояние после стентирования "+parent(curentArtery[i].name)+", функционирующий стент. ";
-	} else if (curentArtery[i].leasions[0].leasionType=="г/незначимый рестеноз") {
+	} else if (curentLeasion=="г/незначимый рестеноз") {
 		description+=curentArtery[i].name+": визуализируется стент, проходим, в просвете с неровными контурами, значимо не сужен. ";
 		conclusion+="Состояние после стентирования "+parent(curentArtery[i].name)+", функционирующий стент. ";
-	} else if (curentArtery[i].leasions[0].leasionType=="ин-стент рестеноз") {
+	} else if (curentLeasion=="ин-стент рестеноз") {
 		description+=curentArtery[i].name+": визуализируется стент, в просвете сужение до "+curentArtery[i].leasions[0].percent+". ";
 		conclusion+="Состояние после стентирования "+parent(curentArtery[i].name)+", ин-стент рестеноз "+curentArtery[i].leasions[0].percent+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="дистальный краевой рестеноз") {
+	} else if (curentLeasion=="дистальный краевой рестеноз") {
 		description+=curentArtery[i].name+": визуализируется стент, в области дистального края сужение до "+curentArtery[i].leasions[0].percent+". ";
 		conclusion+="Состояние после стентирования "+parent(curentArtery[i].name)+", дистальный краевой рестеноз "+curentArtery[i].leasions[0].percent+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="проксимальный краевой рестеноз") {
+	} else if (curentLeasion=="проксимальный краевой рестеноз") {
 		description+=curentArtery[i].name+": визуализируется стент, в области проксимального края сужение до "+curentArtery[i].leasions[0].percent+". ";
 		conclusion+="Состояние после стентирования "+parent(curentArtery[i].name)+", проксимальный краевой рестеноз "+curentArtery[i].leasions[0].percent+". ";
-	} else if (curentArtery[i].leasions[0].leasionType=="реокклюзия") {
+	} else if (curentLeasion=="реокклюзия") {
 		description+=curentArtery[i].name+": визуализируется стент, в просвете не контрастируется";
 		conclusion+="Состояние после стентирования "+parent(curentArtery[i].name)+", реокклюзия. ";
 	}
@@ -165,10 +166,24 @@ function checkMale (forArt, str) {
 	return str;
 }
 
-function wholeArtery (str) {
+function wholeArtery (str) { //возвращает название артерии по её фрагменту
 	for (var j=0; j<arteries.length; j++) {
 		for (var i=0; i<str.length; i++) {
 			if (arteries[j]==str.slice(i, i+arteries[j].length)) {return arteries[j]}
 		}
 	}
+}
+
+function group (leasion, art) {
+	for (i=0; i<cor.length; i++) {
+		var fullArtPos=art.indexOf(wholeArtery(art));
+		var fullArtLength=wholeArtery(art).length;
+		var arrName=cor[i].name.split("");
+		alert(cor[i].name);
+		if ((cor[i].name.indexOf(wholeArtery(art))>-1)&&(cor[i+1].leasions[0].leasionType==leasion)) {
+			art+=arrName.splice(fullArtPos, fullArtLength);
+			cor[i].leasions.splice(0, 1);
+		}
+	}
+	return art;
 }
