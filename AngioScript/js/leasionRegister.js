@@ -17,7 +17,7 @@ function register() {
 		}
 	}
 	if (leasionType_value=="сегментарная окклюзия") {
-		var leasion = new Leasion(leasionType_value, occlusionLength.value);//создаем объект для сегментарной окклюзии
+		var leasion = new Leasion(leasionType_value, occlusionLength.value); //создаем объект для сегментарной окклюзии
 	} else {
 		var leasion = new Leasion(leasionType_value, leasionPercent.value); //создаем объект для любого другого поражения
 	}

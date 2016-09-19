@@ -3,7 +3,8 @@ var conclusion=""; var description=""; var curentArtery = []; var arrName = []; 
 function descriptArea(i) {
 	var curentLeasion = curentArtery[i].leasions[0].leasionType;
 	if (curentLeasion=="узурация контуров") {
-		description+=group(curentLeasion, curentArtery[i].name)+" с неровными контурами, проходима, значимо не сужена. ";
+		description+=curentArtery[i].name+" с неровными контурами, проходима, значимо не сужена. ";
+	} else if (curentLeasion=="не описывать") {
 	} else if (curentLeasion=="г/незначимый стеноз") {
 		description+=curentArtery[i].name+checkMale(curentArtery[i].name, " сужена менее 50%. ");
 	} else if (curentLeasion=="локальный стеноз") {
@@ -25,8 +26,8 @@ function descriptArea(i) {
 		description+=wholeArtery(curentArtery[i].name)+" не контрастируется. ";
 		conclusion+="Окклюзия "+parent(wholeArtery(curentArtery[i].name))+". ";
 	} else if (curentLeasion=="магистральная окклюзия") {
-		description+=curentArtery[i].name+" не контрастируется. ";
-		conclusion+="Окклюзия "+parent(curentArtery[i].name)+". ";
+		description+=curentArtery[i].name+" и дистальнее не контрастируется. ";
+		conclusion+="Окклюзия "+parent(curentArtery[i].name)+" и дистальнее. ";
 	} else if (curentLeasion=="неокклюзионный тромбоз") {
 		description+=curentArtery[i].name+" в просвете определяется дефект наполнения, суживающий просвет артерии до "+curentArtery[i].leasions[0].percent+". ";
 		conclusion+=curentLeasion+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
@@ -59,13 +60,13 @@ function makeDescription() {
 	var description_str=[]; var isClear = true; var nonSignif=false; var firstRCA=true; 
 	description=""; conclusion="";
 	for (var i = 0; i < cor.length; i++) { //проверяем без патологии или г/незначимые стенозы
-		if (cor[i].leasions.length>0) {
+		if ((cor[i].leasions.length>0)&&(cor[i].leasions[0].leasionType!="не описывать")) {
 			isClear=false;
 			if ((cor[i].leasions[0].leasionType=="узурация контуров")||
 				(cor[i].leasions[0].leasionType=="г/незначимый стеноз")) {nonSignif=true}
 		}
 	}
-		if (isClear==false) { //создаем эпилог заключения
+		if (isClear==false) { //создаем префикс заключения
 			conclusion="Ангиографические признаки атеросклеротического поражения "+regioInParent;
 			if (nonSignif==true) {
 				conclusion+=" без гемодинамически значимых изменений."
@@ -81,15 +82,13 @@ function makeDescription() {
 		arrArt = arteries[j].split("");
 		for (var i = 0; i < cor.length; i++) { //перебор поражений
 			arrName = cor[i].name.split("");
-			for (var k=0; k<arrName.length; k++) {// поиск совпадений по имени
+			for (var k=0; k<arrName.length; k++) { // поиск совпадений по имени
 				nameCheck = arrName.slice(k, k+arrArt.length);
-				if (nameCheck.join("")==arteries[j]) {curentArtery.push(cor[i])} //собираем фрагменты текущей артерии
+				if (nameCheck.join("")==arteries[j]) {curentArtery.push(cor[i])} //собираем сегменты текущей артерии
 			}
 		}// конец перебора поражений
 		for (var i = 0; i < curentArtery.length; i++) {// проверяем наличие поражений в артерии
-			if (curentArtery[i].leasions.length>0) {
-				isClear=false;
-			}
+			if (curentArtery[i].leasions.length>0) {isClear=false}
 		}
 		if (isClear==false) {
 			for (var l=0; l<curentArtery.length; l++) {
@@ -119,34 +118,38 @@ finish.onclick=makeDescription; // обработка кнопки выдачи 
 
 function parent (str) {
 	var arrStr=str.split("");
-	for (i=0; i<str.length; i++) {
-		if (str.slice(i, i+8)=="почечная") {
-			arrStr.splice(str.indexOf("почечная")+6, 2, "ой");
-			str=arrStr.join(""); arrStr=str.split("");
-		}
+	if (str.indexOf("почечная")>-1) {	
+		arrStr.splice(str.indexOf("почечная")+6, 2, "о", "й");
+		str=arrStr.join(""); arrStr=str.split("");
 	}
-	for (i=0; i<str.length; i++) {
-		if (str.slice(i, i+7)=="артерия") {
-			arrStr.splice(str.indexOf("артерия")+6, 1, "и");
-			str=arrStr.join(""); arrStr=str.split("");
+	if ((str.indexOf("артерия")>-1)||(str.indexOf("Артерия")>-1)) {	
+		arrStr[0]=arrStr[0].toLowerCase();
+		if (wholeArtery(curentArtery[i].name)=="Артерия острого края") {arrStr.splice(str.indexOf("артерия")+7, 1, "и")} 
+			else {arrStr.splice(str.indexOf("артерия")+6, 1, "и")}
+		str=arrStr.join(""); arrStr=str.split("");
 		}
+	if ((str.indexOf("ствол")>-1)||(str.indexOf("Ствол")>-1)) {
+		arrStr[0]=arrStr[0].toLowerCase();
+		arrStr.splice(str.indexOf("ствол")+6, 0, "а");
+		str=arrStr.join(""); arrStr=str.split("");
 	}
-	for (i=0; i<str.length; i++) {
-		str=arrStr.join("");
-		if (str.slice(i, i+5)=="ствол") {
+	if (str.indexOf("ветвь")>-1) {
 			arrStr[0]=arrStr[0].toLowerCase();
-			arrStr.splice(str.indexOf("ствол")+5, 0, "а");
+			arrStr.splice(str.indexOf("ветвь")+4, 1, "и");
 			str=arrStr.join(""); arrStr=str.split("");
 		}
-	}
 	var fragment=str.slice(str.indexOf(" ")-2, str.indexOf(" "));
 	if (fragment=="ая"){
-		arrStr.splice(str.indexOf("ая")-i, 2, "ой");
+		arrStr.splice(str.indexOf("ая"), 2, "ой");
 		arrStr[0]=arrStr[0].toLowerCase();
+		str=arrStr.join(""); arrStr=str.split("");
+
 	}
 	if (fragment=="ый"){
 		arrStr.splice(str.indexOf("ый"), 2, "ого");
 		arrStr[0]=arrStr[0].toLowerCase();
+		str=arrStr.join(""); arrStr=str.split("");
+
 	}
 	return arrStr.join("");
 }
@@ -160,7 +163,13 @@ function fromUp (str) {
 function checkMale (forArt, str) {
 	if ((forArt=="Чревный ствол")||(forArt=="ТПС")||(forArt=="Левый ТПС")||(forArt=="Правый ТПС")||(forArt=="Ствол ЛКА")) {
 		var arrStr=str.split("");
-		if (str.indexOf("сужена")>-1){arrStr.splice(str.indexOf("сужена")+5, 1)} 
+		if (str.indexOf("сужена")>-1){
+			arrStr.splice(str.indexOf("сужена")+5, 1);
+		} 
+		if (str.indexOf("проходима")>-1){
+			arrStr.splice(str.indexOf("проходима")+8, 1);
+			str=arrStr.join(""); arrStr=str.split("");
+		} 
 		str=arrStr.join("");
 	}
 	return str;
