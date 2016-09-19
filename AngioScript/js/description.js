@@ -3,7 +3,7 @@ var conclusion=""; var description=""; var curentArtery = []; var arrName = []; 
 function descriptArea(i) {
 	var curentLeasion = curentArtery[i].leasions[0].leasionType;
 	if (curentLeasion=="узурация контуров") {
-		description+=curentArtery[i].name+" с неровными контурами, проходима, значимо не сужена. ";
+		description+=group(curentArtery[i].name, curentLeasion)+" с неровными контурами, проходима, значимо не сужена. ";
 	} else if (curentLeasion=="не описывать") {
 	} else if (curentLeasion=="г/незначимый стеноз") {
 		description+=curentArtery[i].name+checkMale(curentArtery[i].name, " сужена менее 50%. ");
@@ -14,7 +14,7 @@ function descriptArea(i) {
 		description+=curentArtery[i].name+checkMale(curentArtery[i].name, " сегментарно сужена до ")+curentArtery[i].leasions[0].percent+". ";
 		conclusion+=fromUp(curentLeasion)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
 	} else if (curentLeasion=="пролонгированный стеноз") {
-		description+=curentArtery[i].name+checkMale(curentArtery[i].name, " равномерно сужена до ")+curentArtery[i].leasions[0].percent+". ";
+		description+=group(curentArtery[i].name, curentLeasion)+checkMale(curentArtery[i].name, " равномерно сужена до ")+curentArtery[i].leasions[0].percent+". ";
 		conclusion+=fromUp(curentLeasion)+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
 	} else if (curentLeasion=="множественные стенозы") {
 		description+=curentArtery[i].name+" со множественными сужениями до "+curentArtery[i].leasions[0].percent+". ";
@@ -183,15 +183,13 @@ function wholeArtery (str) { //возвращает название артер�
 	}
 }
 
-function group (leasion, art) {
-	for (i=0; i<cor.length; i++) {
-		var fullArtPos=art.indexOf(wholeArtery(art));
-		var fullArtLength=wholeArtery(art).length;
-		var arrName=cor[i].name.split("");
-		alert(cor[i].name);
-		if ((cor[i].name.indexOf(wholeArtery(art))>-1)&&(cor[i+1].leasions[0].leasionType==leasion)) {
-			art+=arrName.splice(fullArtPos, fullArtLength);
-			cor[i].leasions.splice(0, 1);
+function group (art, leasion) {
+	for (var q=0; q<curentArtery.length; q++) {
+		if ((curentArtery[q]!=art)&&(curentArtery[q].leasions.length>0)) {
+			if (curentArtery[q].leasions[0].leasionType==leasion) {
+				curentArtery.leasions=[];
+				return art+", "+curentArtery[q].name;
+			}
 		}
 	}
 	return art;
