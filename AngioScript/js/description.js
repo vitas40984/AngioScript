@@ -3,7 +3,7 @@ var conclusion=""; var description=""; var curentArtery = []; var arrName = []; 
 function descriptArea(i) {
 	var curentLeasion = curentArtery[i].leasions[0].leasionType;
 	if (curentLeasion=="узурация контуров") {
-		description+=group(curentArtery[i].name, curentLeasion)+" с неровными контурами, проходима, значимо не сужена. ";
+		description+=group(curentArtery[i].name, curentLeasion, i)+" с неровными контурами, проходима, значимо не сужена. ";
 	} else if (curentLeasion=="не описывать") {
 	} else if (curentLeasion=="г/незначимый стеноз") {
 		description+=curentArtery[i].name+checkMale(curentArtery[i].name, " сужена менее 50%. ");
@@ -31,7 +31,14 @@ function descriptArea(i) {
 	} else if (curentLeasion=="неокклюзионный тромбоз") {
 		description+=curentArtery[i].name+" в просвете определяется дефект наполнения, суживающий просвет артерии до "+curentArtery[i].leasions[0].percent+". ";
 		conclusion+=curentLeasion+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
-	} else if (curentLeasion=="окклюзионный тромбоз") {
+	}  
+
+	else if (curentLeasion=="миокардиальный мостик") {
+		description+=curentArtery[i].name+" в систолу имеет сегментарное сужение до "+curentArtery[i].leasions[0].percent+". ";
+		conclusion+="Миокардиальный мостик "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
+	} 
+
+	else if (curentLeasion=="окклюзионный тромбоз") {
 		description+=curentArtery[i].name+" в просвете определяется дефект наполнения, полностью перекрывающий просвет артерии. ";
 		conclusion+="Тромбоз "+parent(curentArtery[i].name)+". ";
 		// СТЕНТЫ
@@ -57,21 +64,28 @@ function descriptArea(i) {
 }
 
 function makeDescription() {
-	var description_str=[]; var isClear = true; var nonSignif=false; var firstRCA=true; 
+	var description_str=[]; var isClear = true; var nonSignif=false; var firstRCA=true; var signif=false; var arrConclusion="";
 	description=""; conclusion="";
-	for (var i = 0; i < cor.length; i++) { //проверяем без патологии или г/незначимые стенозы
-		if ((cor[i].leasions.length>0)&&(cor[i].leasions[0].leasionType!="не описывать")) {
+	for (var i = 0; i < cor.length; i++) { //создаем условия префикса
+		if ((cor[i].leasions.length>0)&&
+			(((cor[i].leasions[0].leasionType!="не описывать")&&
+ 			(cor[i].leasions[0].leasionType!="миокардиальный мостик"))||
+ 			(cor[i].remainVessel=="узурация контуров"))) { //проверка на чистоту сосудов
 			isClear=false;
 			if ((cor[i].leasions[0].leasionType=="узурация контуров")||
-				(cor[i].leasions[0].leasionType=="г/незначимый стеноз")) {nonSignif=true}
+				(cor[i].leasions[0].leasionType=="г/незначимый стеноз")) {nonSignif=true}//проверка на г/незначимые поражения
 		}
+		if ((cor[i].leasions.length>0)&&
+			(cor[i].leasions[0].leasionType!="не описывать")&&
+			(cor[i].leasions[0].leasionType!="узурация контуров")&&
+			(cor[i].leasions[0].leasionType!="г/незначимый стеноз")) {signif=true}//проверка на г/значимые поражения
 	}
 		if (isClear==false) { //создаем префикс заключения
 			conclusion="Ангиографические признаки атеросклеротического поражения "+regioInParent;
-			if (nonSignif==true) {
-				conclusion+=" без гемодинамически значимых изменений."
+			if ((nonSignif==true)&&(signif==false)) {
+				conclusion+=" без гемодинамически значимых изменений. "
 			} else {conclusion+=". "}
-		} else {conclusion="Ангиографических признаков поражения "+regioInParent+" не выявлено."}
+		} else {conclusion="Ангиографических признаков поражения "+regioInParent+" не выявлено. "}
 
 	for (var j=0; j<arteries.length; j++){ //перебор артерий
 		if ((arteries[j].indexOf("ПКА")>-1)&&(firstRCA==true)) { //абзац перед ПКА
@@ -99,11 +113,21 @@ function makeDescription() {
 					description=description_str.join("");
 					description+=", на остальном протяжении, с неровными контурами, проходима, значимо не сужена. ";
 				} 
+				if (curentArtery[l].remainVessel=="без особенностей") {
+					description_str=description.split("");
+					description_str.splice(-2, 2);
+					description=description_str.join("");
+					description+=", на остальном протяжении, проходима, не сужена. ";
+				} 
 				if (curentArtery[l].remainVessel=="окклюзия") {
 					description_str=description.split("");
 					description_str.splice(-2, 2);
 					description=description_str.join("");
 					description+=", на остальном протяжении, не контрастируется. ";
+					arrConclusion=conclusion.split("");
+					arrConclusion.splice(-2, 2);
+					conclusion=arrConclusion.join("");
+					conclusion+=", дистальнее окклюзия. ";
 				}
 			}
 		} else {
@@ -183,12 +207,12 @@ function wholeArtery (str) { //возвращает название артер�
 	}
 }
 
-function group (art, leasion) {
+function group (art, leasion, i) {
 	for (var q=0; q<curentArtery.length; q++) {
-		if ((curentArtery[q]!=art)&&(curentArtery[q].leasions.length>0)) {
+		if ((curentArtery[q].name!=art)&&(curentArtery[q].leasions.length>0)) {
 			if (curentArtery[q].leasions[0].leasionType==leasion) {
-				curentArtery.leasions=[];
-				return art+", "+curentArtery[q].name;
+				curentArtery[q].leasions=[]; curentArtery[i].leasions=[];
+				art+=", "+curentArtery[q].name;
 			}
 		}
 	}
