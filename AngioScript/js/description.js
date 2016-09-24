@@ -1,4 +1,5 @@
-var conclusion=""; var description=""; var curentArtery = []; var arrName = []; var arrArt = []; var nameCheck=[]; var groupForConclusion;
+var conclusion=""; var description=""; var curentArtery = []; var arrName = []; var arrArt = []; var nameCheck=[]; 
+var groupForConclusion;
 
 function descriptArea(i) {
 	var curentLeasion = curentArtery[i].leasions[0].leasionType;
@@ -19,25 +20,25 @@ function descriptArea(i) {
 		conclusion+=fromUp(curentLeasion)+" "+parent(groupForConclusion)+" "+curentPercent+". ";
 	} else if (curentLeasion=="множественные стенозы") {
 		description+=group(curentArtery[i].name, curentLeasion, i, curentPercent)+" со множественными сужениями до "+curentPercent+". ";
-		conclusion+=fromUp(curentLeasion)+" "+parent(curentArtery[i].name)+" "+curentPercent+". ";
+		conclusion+=fromUp(curentLeasion)+" "+parent(groupForConclusion)+" "+curentPercent+". ";
 	} else if (curentLeasion=="сегментарная окклюзия") {
 		description+=group(curentArtery[i].name, curentLeasion, i, curentPercent)+" сегментарно не контрастируется на протяжении "+curentPercent+". ";
-		conclusion+=fromUp(curentLeasion)+" "+parent(curentArtery[i].name)+" "+curentPercent+". ";
+		conclusion+=fromUp(curentLeasion)+" "+parent(groupForConclusion)+" "+curentPercent+". ";
 	} else if (curentLeasion=="магистральная окклюзия от устья") {
 		description+=wholeArtery(curentArtery[i].name)+" не контрастируется. ";
 		conclusion+="Окклюзия "+parent(wholeArtery(curentArtery[i].name))+". ";
 	} else if (curentLeasion=="магистральная окклюзия") {
 		description+=group(curentArtery[i].name, curentLeasion, i, curentPercent)+" и дистальнее не контрастируется. ";
-		conclusion+="Окклюзия "+parent(curentArtery[i].name)+" и дистальнее. ";
+		conclusion+="Окклюзия "+parent(groupForConclusion)+" и дистальнее. ";
 	} else if (curentLeasion=="неокклюзионный тромбоз") {
 		description+=group(curentArtery[i].name, curentLeasion, i, curentPercent)+" в просвете определяется дефект наполнения, суживающий просвет артерии до "+curentPercent+". ";
-		conclusion+=curentLeasion+" "+parent(curentArtery[i].name)+" "+curentPercent+". ";
+		conclusion+=curentLeasion+" "+parent(groupForConclusion)+" "+curentPercent+". ";
 	} else if (curentLeasion=="миокардиальный мостик") {
 		description+=group(curentArtery[i].name, curentLeasion, i, curentPercent)+" в систолу имеет сегментарное сужение до "+curentPercent+". ";
-		conclusion+="Миокардиальный мостик "+parent(curentArtery[i].name)+" "+curentPercent+". ";
+		conclusion+="Миокардиальный мостик "+parent(groupForConclusion)+" "+curentPercent+". ";
 	} else if (curentLeasion=="окклюзионный тромбоз") {
 		description+=group(curentArtery[i].name, curentLeasion, i, curentPercent)+" в просвете определяется дефект наполнения, полностью перекрывающий просвет артерии. ";
-		conclusion+="Тромбоз "+parent(curentArtery[i].name)+". ";
+		conclusion+="Тромбоз "+parent(groupForConclusion)+". ";
 		// СТЕНТЫ
 	} else if (curentLeasion=="функционирующий стент") {
 		description+=curentArtery[i].name+": визуализируется стент, проходим, в просвете не сужен. ";
@@ -132,18 +133,20 @@ function makeDescription() {
 		}
 	}// конец перебора артерий
 	
-	var radios = document.getElementsByName('corType');// 
-	var corType_value="";
-	for (var i=0; i<radios.length; i++) {
-		if (radios[i].selected) {
-			corType_value = radios[i].value; // получаем значение выбранного corType
-			break;
+	if (cor==cardiac) { // описание типа коронарного кровообращения
+		var radios = document.getElementsByName('corType'); 
+		var corType_value="";
+		for (var i=0; i<radios.length; i++) {
+			if (radios[i].selected) {
+				corType_value = radios[i].value; // получаем значение выбранного corType
+				break;
+			}
 		}
+		if (corType_value!="Не указывать") {
+			conclusion+="\n"+corType_value+" тип коронарного кровообращения.";
+		} 
 	}
-	if (corType_value!="Не указывать") {
-		conclusion+="\n"+corType_value+" тип коронарного кровообращения.";
-	}
-	
+
 	descriptionOut.value=description; //выдаем описание
 	conclusionOut.value=conclusion; //выдаем заключение
 }
@@ -222,7 +225,10 @@ function group (art, leasion, i, percent) { //группировка анало�
 		if ((curentArtery[q].name!=art)&&
 			(curentArtery[q].leasions.length>0)) {
 			if ((curentArtery[q].leasions[0].leasionType==leasion)&&(curentArtery[q].leasions[0].percent==percent)) {
-				art+=", "+curentArtery[q].name;
+				var str=curentArtery[q].name; var arrStr=str.split("");
+				arrStr.splice(str.indexOf(wholeArtery(str)), wholeArtery(str).length+1);
+				str=arrStr.join("");
+				art+=", "+str;
 				curentArtery[q].leasions[0].leasionType=""; curentArtery[i].leasions=[];
 			}
 		}
