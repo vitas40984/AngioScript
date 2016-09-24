@@ -31,14 +31,10 @@ function descriptArea(i) {
 	} else if (curentLeasion=="неокклюзионный тромбоз") {
 		description+=curentArtery[i].name+" в просвете определяется дефект наполнения, суживающий просвет артерии до "+curentArtery[i].leasions[0].percent+". ";
 		conclusion+=curentLeasion+" "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
-	}  
-
-	else if (curentLeasion=="миокардиальный мостик") {
+	} else if (curentLeasion=="миокардиальный мостик") {
 		description+=curentArtery[i].name+" в систолу имеет сегментарное сужение до "+curentArtery[i].leasions[0].percent+". ";
 		conclusion+="Миокардиальный мостик "+parent(curentArtery[i].name)+" "+curentArtery[i].leasions[0].percent+". ";
-	} 
-
-	else if (curentLeasion=="окклюзионный тромбоз") {
+	} else if (curentLeasion=="окклюзионный тромбоз") {
 		description+=curentArtery[i].name+" в просвете определяется дефект наполнения, полностью перекрывающий просвет артерии. ";
 		conclusion+="Тромбоз "+parent(curentArtery[i].name)+". ";
 		// СТЕНТЫ
@@ -134,13 +130,26 @@ function makeDescription() {
 			description+=arteries[j]+checkMale(arteries[j], " проходима, не сужена. ");//выдаем при отсутствии поражений
 		}
 	}// конец перебора артерий
+	
+	var radios = document.getElementsByName('corType');// 
+	var corType_value="";
+	for (var i=0; i<radios.length; i++) {
+		if (radios[i].selected) {
+			corType_value = radios[i].value; // получаем значение выбранного corType
+			break;
+		}
+	}
+	if (corType_value!="Не указывать") {
+		conclusion+="\n"+corType_value+" тип коронарного кровообращения.";
+	}
+	
 	descriptionOut.value=description; //выдаем описание
 	conclusionOut.value=conclusion; //выдаем заключение
 }
 
 finish.onclick=makeDescription; // обработка кнопки выдачи заключения
 
-function parent (str) {
+function parent (str) { //перевод str к родительному падежу
 	var arrStr=str.split("");
 	if (str.indexOf("почечная")>-1) {	
 		arrStr.splice(str.indexOf("почечная")+6, 2, "о", "й");
@@ -207,7 +216,7 @@ function wholeArtery (str) { //возвращает название артер�
 	}
 }
 
-function group (art, leasion, i) {
+function group (art, leasion, i) { //группировка аналогичных поражений
 	for (var q=0; q<curentArtery.length; q++) {
 		if ((curentArtery[q].name!=art)&&(curentArtery[q].leasions.length>0)) {
 			if (curentArtery[q].leasions[0].leasionType==leasion) {
