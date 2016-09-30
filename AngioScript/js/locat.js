@@ -1,5 +1,5 @@
 function shut() {
-	zone.onmouseup=function() {
+	document.onmouseup=function(event) {
 	xs=event.pageX-30;
 	ys=event.pageY-133;
 	locat();
