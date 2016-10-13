@@ -5,12 +5,16 @@
 	<title>Angio d'script - он-лайн сервис для описания ангиограмм</title>
 	<meta charset="utf-8">
 	<meta name="yandex-verification" content="6deab9f49a99d132" />
+	<!--[if lt IE 8]> 
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script> 
+	<![endif]-->
 	<style>
 		body {
 			background-image: url(img/back-transp.png);
 			padding: 0 10px;
 		}
 		header {
+			display: block;
 			background-image: url(img/room70.jpg); 
 			height: 100px;
 			border-bottom: 2px solid gray;
@@ -18,6 +22,7 @@
 			background-repeat: no-repeat;
 			white-space: nowrap;
 		}
+		main {display: block;}
 		.regio {
 			border: 5px solid gray;
 			display: inline-block;
@@ -48,6 +53,7 @@
 			padding-top: 30px;
 		}
 		footer {
+			display: block;
 			background-color: #CCCCCC;
 			border-top: 2px solid gray;
 			padding: 10px;
@@ -84,7 +90,7 @@
 		</a>
 		<div class="news">
 			<p class="date"><i>12.10.2016</i></p>
-			<p class="new">Уважаемые колеги! Обнаружилось, что кнопки "Скопировать в буфер" работают не во всех браузерах. На данный момент обнаружена проблема в Mozilla Firefox. Идет работа по её устранению. <br>Пожалуйста, сообщайте о выявленных дефектах программы в разделе <a href="feedback.html">обратная связь</a> или на <a href="forum.html">форуме</a>.</p>
+			<p class="new">Уважаемые колеги! Оказывается, в браузере Mozilla Firefox копирование текста в буфер запрещено из соображений политики безопасности браузера. Поэтому кнопки "Скопировать в буфер" в нем не работают.<br>Пожалуйста, сообщайте о выявленных дефектах программы в разделе <a href="feedback.html">обратная связь</a> или на <a href="forum.html">форуме</a>.</p>
 			<p class="date"><i>6.10.2016</i></p>
 			<p class="new">Добавлены кнопки "Скопировать в буфер" к полям описания и заключения.</p>
 			<p class="date"><i>1.10.2016</i></p>
@@ -134,6 +140,17 @@
 				<li><a href="instructions.html">Как этим пользоваться?</a></li>
 				<li><a href="feedback.html">Обратная связь</a></li>
 				<li><a href="forum.html">Обсудить проект</a></li>
+			</ul>
+		</div>
+		<div style="float: right;">
+			<ul type="none">
+				<li>&nbsp;</li>
+				<li>
+					<!-- Begin SPRINTHOST.RU button code -->
+					<a href="http://sprinthost.ru/13813"><img src="http://sprinthost.ru/ad/buttons/button_88x31_s01.png" border="0" width="88" height="31" alt="SPRINTHOST.RU: быстрый и надежный хостинг!" /></a>
+					<!-- End SPRINTHOST.RU button code -->
+				</li>
+				<li>&nbsp;</li>
 			</ul>
 		</div>
 		<p><small><i>&copy; авторские права защищены согласно п.4 ст.1259 ГК РФ</i></small></p>
